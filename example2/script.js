@@ -5,13 +5,23 @@ import rhino3dm from 'https://cdn.jsdelivr.net/npm/rhino3dm@0.15.0-beta/rhino3dm
 import { RhinoCompute } from 'https://cdn.jsdelivr.net/npm/compute-rhino3d@0.13.0-beta/compute.rhino3d.module.js'
 
 // reference the definition
-const definitionName = 'spiralmoire.gh'
+const definitionName = 'MoonDome.gh'
 
 // listen for slider change events
-const count_slider = document.getElementById( 'amplitude' )
-count_slider.addEventListener( 'input', onSliderChange, false )
-const radius_slider = document.getElementById( 'rotation' )
+const radius_slider = document.getElementById( 'radius' )
 radius_slider.addEventListener( 'input', onSliderChange, false )
+const offset_slider = document.getElementById( 'offset' )
+offset_slider.addEventListener( 'input', onSliderChange, false )
+const toolpath_slider = document.getElementById( 'toolpath' )
+toolpath_slider.addEventListener( 'input', onSliderChange, false )
+const piperadius_slider = document.getElementById( 'piperadius' )
+piperadius_slider.addEventListener( 'input', onSliderChange, false )
+const step_slider = document.getElementById( 'step' )
+step_slider.addEventListener( 'input', onSliderChange, false )
+const count_slider = document.getElementById( 'count' )
+count_slider.addEventListener( 'input', onSliderChange, false )
+const rotation_slider = document.getElementById( 'rotation' )
+rotation_slider.addEventListener( 'input', onSliderChange, false )
 
 const downloadButton = document.getElementById("downloadButton")
 downloadButton.onclick = download
@@ -49,23 +59,43 @@ async function compute() {
     // collect data
 
     // get slider values
-    let amplitude = document.getElementById('amplitude').valueAsNumber
+    let radius = document.getElementById('radius').valueAsNumber
+    let offset = document.getElementById('offset').valueAsNumber
+    let path = document.getElementById('path').valueAsNumber
+    let piperadius = document.getElementById('piperadius').valueAsNumber
+    let step = document.getElementById('step').valueAsNumber
+    let count = document.getElementById('count').valueAsNumber
     let rotation = document.getElementById('rotation').valueAsNumber
-
+    
     // format data
-    let param1 = new RhinoCompute.Grasshopper.DataTree('RH_IN:amplitude')
-    param1.append([0], [amplitude])
-    let param2 = new RhinoCompute.Grasshopper.DataTree('RH_IN:rotation')
-    param2.append([0], [rotation])
+    let param1 = new RhinoCompute.Grasshopper.DataTree('RH_IN:radius')
+    param1.append([0], [radius])
+    let param2 = new RhinoCompute.Grasshopper.DataTree('RH_IN:offset')
+    param2.append([0], [offset])
+    let param3 = new RhinoCompute.Grasshopper.DataTree('RH_IN:path')
+    param3.append([0], [path])
+    let param4 = new RhinoCompute.Grasshopper.DataTree('RH_IN:piperadius')
+    param4.append([0], [piperadius])
+    let param5 = new RhinoCompute.Grasshopper.DataTree('RH_IN:step')
+    param5.append([0], [step])
+    let param6 = new RhinoCompute.Grasshopper.DataTree('RH_IN:count')
+    param6.append([0], [count])
+    let param7 = new RhinoCompute.Grasshopper.DataTree('RH_IN:rotation')
+    param7.append([0], [rotation])
 
     // Add all params to an array
-    let trees = []
-    trees.push(param1)
-    trees.push(param2)
+    let transform = []
+    transform.push(param1)
+    transform.push(param2)
+    transform.push(param3)
+    transform.push(param4)
+    transform.push(param5)
+    transform.push(param6)
+    transform.push(param7)
 
     // Call RhinoCompute
 
-    const res = await RhinoCompute.Grasshopper.evaluateDefinition(definition, trees)
+    const res = await RhinoCompute.Grasshopper.evaluateDefinition(definition, transform)
 
     console.log(res) 
 
